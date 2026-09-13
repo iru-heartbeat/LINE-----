@@ -3,6 +3,21 @@ import { Pool } from "pg";
 // Neon(PostgreSQL)への接続。サーバーサイドの処理からのみ使う想定。
 const pool = new Pool({ connectionString: process.env.DATABASE_URL });
 
+export async function getSalonName(): Promise<string> {
+  const { rows } = await pool.query<{ salon_name: string }>(
+    "SELECT salon_name FROM shop_settings WHERE id = 1"
+  );
+  return rows[0]?.salon_name ?? "";
+}
+
+export async function updateSalonName(salonName: string): Promise<void> {
+  await pool.query(
+    `INSERT INTO shop_settings (id, salon_name) VALUES (1, $1)
+     ON CONFLICT (id) DO UPDATE SET salon_name = $1, updated_at = now()`,
+    [salonName]
+  );
+}
+
 export type Faq = {
   id: number;
   question: string;

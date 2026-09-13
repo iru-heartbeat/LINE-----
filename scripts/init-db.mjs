@@ -46,6 +46,14 @@ CREATE TABLE IF NOT EXISTS menus (
   duration_min INTEGER NOT NULL,
   updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
 );
+
+-- 店舗名などの単一設定値を保持する。常に1行(id=1)だけを使う想定
+CREATE TABLE IF NOT EXISTS shop_settings (
+  id INTEGER PRIMARY KEY DEFAULT 1,
+  salon_name TEXT NOT NULL DEFAULT '',
+  updated_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+  CONSTRAINT shop_settings_singleton CHECK (id = 1)
+);
 `;
 
 const client = new Client({ connectionString: process.env.DATABASE_URL });
