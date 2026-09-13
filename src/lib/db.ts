@@ -17,6 +17,14 @@ export async function getFaqs(): Promise<Faq[]> {
   return rows;
 }
 
+export async function getFaqById(id: number): Promise<Faq | null> {
+  const { rows } = await pool.query<Faq>(
+    "SELECT id, question, answer, category FROM faqs WHERE id = $1",
+    [id]
+  );
+  return rows[0] ?? null;
+}
+
 export type Menu = {
   id: number;
   category: string;
@@ -73,4 +81,27 @@ export async function getAdminUserByEmail(email: string): Promise<AdminUser | nu
 
 export async function touchAdminLastLogin(adminUserId: number): Promise<void> {
   await pool.query("UPDATE admin_users SET last_login_at = now() WHERE id = $1", [adminUserId]);
+}
+
+export async function createFaq(params: { question: string; answer: string; category: string | null }): Promise<void> {
+  await pool.query(
+    "INSERT INTO faqs (question, answer, category) VALUES ($1, $2, $3)",
+    [params.question, params.answer, params.category]
+  );
+}
+
+export async function updateFaq(params: {
+  id: number;
+  question: string;
+  answer: string;
+  category: string | null;
+}): Promise<void> {
+  await pool.query(
+    "UPDATE faqs SET question = $2, answer = $3, category = $4, updated_at = now() WHERE id = $1",
+    [params.id, params.question, params.answer, params.category]
+  );
+}
+
+export async function deleteFaq(id: number): Promise<void> {
+  await pool.query("DELETE FROM faqs WHERE id = $1", [id]);
 }
