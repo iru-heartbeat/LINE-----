@@ -105,3 +105,31 @@ export async function updateFaq(params: {
 export async function deleteFaq(id: number): Promise<void> {
   await pool.query("DELETE FROM faqs WHERE id = $1", [id]);
 }
+
+export type Inquiry = {
+  id: number;
+  lineUserId: string;
+  message: string;
+  botResponse: string | null;
+  isEscalated: boolean;
+  createdAt: string;
+};
+
+export async function getInquiries(): Promise<Inquiry[]> {
+  const { rows } = await pool.query<{
+    id: number;
+    line_user_id: string;
+    message: string;
+    bot_response: string | null;
+    is_escalated: boolean;
+    created_at: string;
+  }>("SELECT id, line_user_id, message, bot_response, is_escalated, created_at FROM inquiries ORDER BY created_at DESC");
+  return rows.map((r) => ({
+    id: r.id,
+    lineUserId: r.line_user_id,
+    message: r.message,
+    botResponse: r.bot_response,
+    isEscalated: r.is_escalated,
+    createdAt: r.created_at,
+  }));
+}
