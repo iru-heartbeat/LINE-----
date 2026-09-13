@@ -38,6 +38,9 @@ export default async function InquiriesPage() {
               </span>
               <span className="text-xs text-gray-400 dark:text-gray-500">{formatDateTime(inquiry.createdAt)}</span>
             </div>
+            <p className="text-xs text-gray-500 dark:text-gray-400">
+              送信者: {inquiry.lineDisplayName ?? `不明（ID: ${inquiry.lineUserId}）`}
+            </p>
             <p className="text-sm text-gray-900 dark:text-gray-100">質問: {inquiry.message}</p>
             {inquiry.botResponse && (
               <p className="mt-1 whitespace-pre-wrap text-sm text-gray-600 dark:text-gray-400">

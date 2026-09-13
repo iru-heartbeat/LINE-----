@@ -94,14 +94,15 @@ export async function deleteMenu(id: number): Promise<void> {
 
 export async function logInquiry(params: {
   lineUserId: string;
+  lineDisplayName: string | null;
   message: string;
   botResponse: string | null;
   isEscalated: boolean;
 }): Promise<void> {
   await pool.query(
-    `INSERT INTO inquiries (line_user_id, message, bot_response, is_escalated)
-     VALUES ($1, $2, $3, $4)`,
-    [params.lineUserId, params.message, params.botResponse, params.isEscalated]
+    `INSERT INTO inquiries (line_user_id, line_display_name, message, bot_response, is_escalated)
+     VALUES ($1, $2, $3, $4, $5)`,
+    [params.lineUserId, params.lineDisplayName, params.message, params.botResponse, params.isEscalated]
   );
 }
 
@@ -151,6 +152,7 @@ export async function deleteFaq(id: number): Promise<void> {
 export type Inquiry = {
   id: number;
   lineUserId: string;
+  lineDisplayName: string | null;
   message: string;
   botResponse: string | null;
   isEscalated: boolean;
@@ -190,14 +192,18 @@ export async function getInquiries(): Promise<Inquiry[]> {
   const { rows } = await pool.query<{
     id: number;
     line_user_id: string;
+    line_display_name: string | null;
     message: string;
     bot_response: string | null;
     is_escalated: boolean;
     created_at: string;
-  }>("SELECT id, line_user_id, message, bot_response, is_escalated, created_at FROM inquiries ORDER BY created_at DESC");
+  }>(
+    "SELECT id, line_user_id, line_display_name, message, bot_response, is_escalated, created_at FROM inquiries ORDER BY created_at DESC"
+  );
   return rows.map((r) => ({
     id: r.id,
     lineUserId: r.line_user_id,
+    lineDisplayName: r.line_display_name,
     message: r.message,
     botResponse: r.bot_response,
     isEscalated: r.is_escalated,

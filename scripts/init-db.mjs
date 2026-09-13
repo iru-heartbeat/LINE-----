@@ -14,11 +14,15 @@ CREATE TABLE IF NOT EXISTS faqs (
 CREATE TABLE IF NOT EXISTS inquiries (
   id SERIAL PRIMARY KEY,
   line_user_id TEXT NOT NULL,
+  line_display_name TEXT,
   message TEXT NOT NULL,
   bot_response TEXT,
   is_escalated BOOLEAN NOT NULL DEFAULT false,
   created_at TIMESTAMPTZ NOT NULL DEFAULT now()
 );
+
+-- 既存のinquiriesテーブルに対しては、このALTERで列を追い足す(初回作成時は上のCREATEで既に入っているため何もしない)
+ALTER TABLE inquiries ADD COLUMN IF NOT EXISTS line_display_name TEXT;
 
 CREATE TABLE IF NOT EXISTS broadcasts (
   id SERIAL PRIMARY KEY,

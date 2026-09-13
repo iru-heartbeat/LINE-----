@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { verifyLineSignature, replyMessage, pushMessage } from "@/lib/line";
+import { verifyLineSignature, replyMessage, pushMessage, getUserDisplayName } from "@/lib/line";
 import { getFaqs, getMenus, logInquiry } from "@/lib/db";
 import { generateFaqAnswer } from "@/lib/claude";
 
@@ -34,12 +34,16 @@ export async function POST(request: NextRequest) {
     console.log("[line-webhook] sender userId:", lineUserId);
 
     try {
-      const [faqs, menus] = await Promise.all([getFaqs(), getMenus()]);
+      const [faqs, menus, lineDisplayName] = await Promise.all([
+        getFaqs(),
+        getMenus(),
+        lineUserId === "unknown" ? Promise.resolve(null) : getUserDisplayName(lineUserId).catch(() => null),
+      ]);
       const { confidence, answer } = await generateFaqAnswer(question, faqs, menus);
 
       if (confidence === "low") {
         await replyMessage(event.replyToken, ESCALATION_MESSAGE);
-        await logInquiry({ lineUserId, message: question, botResponse: null, isEscalated: true });
+        await logInquiry({ lineUserId, lineDisplayName, message: question, botResponse: null, isEscalated: true });
 
         const ownerUserId = process.env.OWNER_LINE_USER_ID;
         if (ownerUserId) {
@@ -52,7 +56,7 @@ export async function POST(request: NextRequest) {
         }
       } else {
         await replyMessage(event.replyToken, answer);
-        await logInquiry({ lineUserId, message: question, botResponse: answer, isEscalated: false });
+        await logInquiry({ lineUserId, lineDisplayName, message: question, botResponse: answer, isEscalated: false });
       }
     } catch (err) {
       console.error("[line-webhook] failed to handle message event", err);

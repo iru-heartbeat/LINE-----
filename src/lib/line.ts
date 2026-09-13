@@ -74,6 +74,19 @@ function getAccessTokenOrThrow(): string {
   return token;
 }
 
+// 送信者の表示名を取得する(友だち解除済み・ブロック中などで取得できない場合はnull)
+export async function getUserDisplayName(userId: string): Promise<string | null> {
+  const token = getAccessTokenOrThrow();
+
+  const res = await fetch(`https://api.line.me/v2/bot/profile/${userId}`, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+  if (!res.ok) return null;
+
+  const data = (await res.json()) as { displayName?: string };
+  return data.displayName ?? null;
+}
+
 // 友だち全員へお知らせメッセージを一斉配信する
 export async function sendBroadcast(text: string): Promise<void> {
   const token = getAccessTokenOrThrow();
