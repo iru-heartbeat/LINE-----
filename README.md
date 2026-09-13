@@ -16,11 +16,15 @@
 
 | ログイン画面 | FAQ管理 | 問い合わせ履歴 |
 |---|---|---|
-| (screenshot) | (screenshot) | (screenshot) |
+| <img width="1170" height="1360" alt="image" src="https://github.com/user-attachments/assets/537ebdb3-8084-49fc-b5f5-7c2d873ce129" />
+ | <img width="950" height="1721" alt="image" src="https://github.com/user-attachments/assets/de1bb3b6-7bbb-4ce3-9bd6-ae5cf8c0cabf" />
+| <img width="950" height="1721" alt="image" src="https://github.com/user-attachments/assets/4496337e-9eb1-48d1-96da-1cd69805621a" />
+ |
 
 | 一斉配信 | ダークモード |
 |---|---|
-| (screenshot) | (screenshot) |
+| <img width="960" height="1704" alt="image" src="https://github.com/user-attachments/assets/deace5ff-d407-4739-b06b-9b60e626b4eb" />
+
 
 ## 主な機能
 
