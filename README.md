@@ -8,22 +8,13 @@
 
 本番相当のデータ・LINEアカウント・課金APIに接続されているため、公開URLはあえて掲載していません（不特定多数がアクセスできる状態にすると、なりすましリクエストによるAPI課金や、管理画面へのアクセス試行のリスクがあるため）。動作の様子はスクリーンショットでご確認ください。
 
-<!--
-  スクリーンショットは docs/screenshots/ に画像を置いて、下のパスをそこに合わせてください。
-  例: docs/screenshots/login.png, docs/screenshots/faqs.png, docs/screenshots/inquiries.png,
-      docs/screenshots/broadcast.png, docs/screenshots/dark-mode.png
--->
-
-| ログイン画面 | FAQ管理 | 問い合わせ履歴 |
-|---|---|---|
-| <img width="1170" height="1360" alt="image" src="https://github.com/user-attachments/assets/537ebdb3-8084-49fc-b5f5-7c2d873ce129" />
- | <img width="950" height="1721" alt="image" src="https://github.com/user-attachments/assets/de1bb3b6-7bbb-4ce3-9bd6-ae5cf8c0cabf" />
-| <img width="950" height="1721" alt="image" src="https://github.com/user-attachments/assets/4496337e-9eb1-48d1-96da-1cd69805621a" />
- |
-
-| 一斉配信 | ダークモード |
+| ログイン画面 | FAQ管理 |
 |---|---|
-| <img width="960" height="1704" alt="image" src="https://github.com/user-attachments/assets/deace5ff-d407-4739-b06b-9b60e626b4eb" />
+| <img width="240" alt="ログイン画面" src="https://github.com/user-attachments/assets/537ebdb3-8084-49fc-b5f5-7c2d873ce129" /> | <img width="240" alt="FAQ管理" src="https://github.com/user-attachments/assets/de1bb3b6-7bbb-4ce3-9bd6-ae5cf8c0cabf" /> |
+
+| 問い合わせ履歴 | 一斉配信 |
+|---|---|
+| <img width="240" alt="問い合わせ履歴" src="https://github.com/user-attachments/assets/4496337e-9eb1-48d1-96da-1cd69805621a" /> | <img width="240" alt="一斉配信" src="https://github.com/user-attachments/assets/deace5ff-d407-4739-b06b-9b60e626b4eb" /> |
 
 
 ## 主な機能
