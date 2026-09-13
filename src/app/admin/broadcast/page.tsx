@@ -20,9 +20,9 @@ export default async function BroadcastPage() {
 
   return (
     <div className="space-y-4">
-      <h1 className="text-lg font-semibold text-gray-900">一斉配信</h1>
+      <h1 className="text-lg font-semibold text-gray-900 dark:text-gray-100">一斉配信</h1>
 
-      <div className="rounded-lg border border-gray-200 bg-white p-4 text-sm text-gray-700">
+      <div className="rounded-lg border border-gray-200 bg-white p-4 text-sm text-gray-700 dark:border-gray-800 dark:bg-gray-900 dark:text-gray-300">
         <p>友だち数（前日時点）: {followerCount ?? "取得できませんでした"}</p>
         {quota ? (
           <p>
@@ -36,16 +36,21 @@ export default async function BroadcastPage() {
 
       <BroadcastForm />
 
-      <h2 className="text-base font-semibold text-gray-900">配信履歴</h2>
-      {broadcasts.length === 0 && <p className="text-sm text-gray-500">配信履歴はまだありません。</p>}
+      <h2 className="text-base font-semibold text-gray-900 dark:text-gray-100">配信履歴</h2>
+      {broadcasts.length === 0 && (
+        <p className="text-sm text-gray-500 dark:text-gray-400">配信履歴はまだありません。</p>
+      )}
       <ul className="space-y-3">
         {broadcasts.map((b) => (
-          <li key={b.id} className="rounded-lg border border-gray-200 bg-white p-4">
-            <div className="mb-1 flex items-center justify-between text-xs text-gray-400">
+          <li
+            key={b.id}
+            className="rounded-lg border border-gray-200 bg-white p-4 dark:border-gray-800 dark:bg-gray-900"
+          >
+            <div className="mb-1 flex items-center justify-between text-xs text-gray-400 dark:text-gray-500">
               <span>{formatDateTime(b.sentAt)}</span>
               <span>送信対象の目安: {b.recipientCount}人</span>
             </div>
-            <p className="whitespace-pre-wrap text-sm text-gray-900">{b.message}</p>
+            <p className="whitespace-pre-wrap text-sm text-gray-900 dark:text-gray-100">{b.message}</p>
           </li>
         ))}
       </ul>

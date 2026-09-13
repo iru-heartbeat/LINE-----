@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { Spinner } from "./spinner";
 
 export function BroadcastForm() {
   const router = useRouter();
@@ -28,7 +29,7 @@ export function BroadcastForm() {
       const data = (await res.json()) as { recipientCount?: number; error?: string };
       if (!res.ok) throw new Error(data.error ?? "配信に失敗しました");
 
-      setResult(`配信しました（送信対象の目安: ${data.recipientCount ?? "不明"}人）`);
+      setResult(`送信しました（送信対象の目安: ${data.recipientCount ?? "不明"}人）`);
       setMessage("");
       router.refresh();
     } catch (err) {
@@ -39,9 +40,12 @@ export function BroadcastForm() {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4 rounded-lg border border-gray-200 bg-white p-4">
+    <form
+      onSubmit={handleSubmit}
+      className="space-y-4 rounded-lg border border-gray-200 bg-white p-4 dark:border-gray-800 dark:bg-gray-900"
+    >
       <div className="space-y-1">
-        <label htmlFor="broadcast-message" className="block text-sm font-medium text-gray-700">
+        <label htmlFor="broadcast-message" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
           配信内容
         </label>
         <textarea
@@ -50,19 +54,26 @@ export function BroadcastForm() {
           rows={4}
           value={message}
           onChange={(e) => setMessage(e.target.value)}
-          className="w-full rounded-md border border-gray-300 px-3 py-2 text-base focus:border-blue-500 focus:outline-none"
+          className="w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-base text-gray-900 focus:border-blue-500 focus:outline-none dark:border-gray-700 dark:bg-gray-800 dark:text-gray-100"
         />
       </div>
 
-      {result && <p className="text-sm text-green-700">{result}</p>}
-      {error && <p className="text-sm text-red-600">{error}</p>}
+      {result && <p className="text-sm text-green-700 dark:text-green-400">{result}</p>}
+      {error && <p className="text-sm text-red-600 dark:text-red-400">{error}</p>}
 
       <button
         type="submit"
         disabled={sending}
-        className="w-full rounded-md bg-blue-600 px-4 py-3 text-base font-medium text-white disabled:opacity-50"
+        className="flex w-full min-h-12 items-center justify-center rounded-md bg-blue-600 px-4 text-base font-medium text-white disabled:opacity-60"
       >
-        {sending ? "配信中..." : "友だち全員に配信する"}
+        {sending ? (
+          <span className="inline-flex items-center gap-2">
+            <Spinner />
+            配信中...
+          </span>
+        ) : (
+          "友だち全員に配信する"
+        )}
       </button>
     </form>
   );

@@ -25,7 +25,7 @@ export async function createFaqAction(formData: FormData): Promise<void> {
 
   await createFaq({ question, answer, category });
   revalidatePath("/admin/faqs");
-  redirect("/admin/faqs");
+  redirect(`/admin/faqs?flash=${encodeURIComponent("追加しました")}`);
 }
 
 export async function updateFaqAction(formData: FormData): Promise<void> {
@@ -36,12 +36,11 @@ export async function updateFaqAction(formData: FormData): Promise<void> {
 
   await updateFaq({ id, question, answer, category });
   revalidatePath("/admin/faqs");
-  redirect("/admin/faqs");
+  redirect(`/admin/faqs?flash=${encodeURIComponent("更新しました")}`);
 }
 
-export async function deleteFaqAction(formData: FormData): Promise<void> {
+export async function deleteFaqAction(id: number): Promise<void> {
   await requireSession();
-  const id = Number(formData.get("id"));
   if (!id) return;
 
   await deleteFaq(id);

@@ -14,7 +14,7 @@ export default async function EditFaqPage({ params }: { params: Promise<{ id: st
 
   return (
     <div className="space-y-4">
-      <h1 className="text-lg font-semibold text-gray-900">FAQ編集</h1>
+      <h1 className="text-lg font-semibold text-gray-900 dark:text-gray-100">FAQ編集</h1>
       <FaqForm action={updateFaqAction} faq={faq} />
     </div>
   );

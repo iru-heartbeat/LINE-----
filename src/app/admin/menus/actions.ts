@@ -25,7 +25,7 @@ export async function createMenuAction(formData: FormData): Promise<void> {
 
   await createMenu({ category, name, price, durationMin });
   revalidatePath("/admin/menus");
-  redirect("/admin/menus");
+  redirect(`/admin/menus?flash=${encodeURIComponent("追加しました")}`);
 }
 
 export async function updateMenuAction(formData: FormData): Promise<void> {
@@ -36,12 +36,11 @@ export async function updateMenuAction(formData: FormData): Promise<void> {
 
   await updateMenu({ id, category, name, price, durationMin });
   revalidatePath("/admin/menus");
-  redirect("/admin/menus");
+  redirect(`/admin/menus?flash=${encodeURIComponent("更新しました")}`);
 }
 
-export async function deleteMenuAction(formData: FormData): Promise<void> {
+export async function deleteMenuAction(id: number): Promise<void> {
   await requireSession();
-  const id = Number(formData.get("id"));
   if (!id) return;
 
   await deleteMenu(id);

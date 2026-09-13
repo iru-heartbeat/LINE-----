@@ -1,5 +1,6 @@
 import Link from "next/link";
 import type { Menu } from "@/lib/db";
+import { SubmitButton } from "./submit-button";
 
 export function MenuForm({
   action,
@@ -9,11 +10,14 @@ export function MenuForm({
   menu?: Menu;
 }) {
   return (
-    <form action={action} className="space-y-4 rounded-lg border border-gray-200 bg-white p-4">
+    <form
+      action={action}
+      className="space-y-4 rounded-lg border border-gray-200 bg-white p-4 dark:border-gray-800 dark:bg-gray-900"
+    >
       {menu && <input type="hidden" name="id" value={menu.id} />}
 
       <div className="space-y-1">
-        <label htmlFor="category" className="block text-sm font-medium text-gray-700">
+        <label htmlFor="category" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
           カテゴリ
         </label>
         <input
@@ -22,12 +26,12 @@ export function MenuForm({
           type="text"
           required
           defaultValue={menu?.category}
-          className="w-full rounded-md border border-gray-300 px-3 py-2 text-base focus:border-blue-500 focus:outline-none"
+          className="w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-base text-gray-900 focus:border-blue-500 focus:outline-none dark:border-gray-700 dark:bg-gray-800 dark:text-gray-100"
         />
       </div>
 
       <div className="space-y-1">
-        <label htmlFor="name" className="block text-sm font-medium text-gray-700">
+        <label htmlFor="name" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
           メニュー名
         </label>
         <input
@@ -36,12 +40,12 @@ export function MenuForm({
           type="text"
           required
           defaultValue={menu?.name}
-          className="w-full rounded-md border border-gray-300 px-3 py-2 text-base focus:border-blue-500 focus:outline-none"
+          className="w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-base text-gray-900 focus:border-blue-500 focus:outline-none dark:border-gray-700 dark:bg-gray-800 dark:text-gray-100"
         />
       </div>
 
       <div className="space-y-1">
-        <label htmlFor="price" className="block text-sm font-medium text-gray-700">
+        <label htmlFor="price" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
           料金（円）
         </label>
         <input
@@ -53,12 +57,12 @@ export function MenuForm({
           inputMode="numeric"
           required
           defaultValue={menu?.price}
-          className="w-full rounded-md border border-gray-300 px-3 py-2 text-base focus:border-blue-500 focus:outline-none"
+          className="w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-base text-gray-900 focus:border-blue-500 focus:outline-none dark:border-gray-700 dark:bg-gray-800 dark:text-gray-100"
         />
       </div>
 
       <div className="space-y-1">
-        <label htmlFor="durationMin" className="block text-sm font-medium text-gray-700">
+        <label htmlFor="durationMin" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
           所要時間（分）
         </label>
         <input
@@ -70,20 +74,20 @@ export function MenuForm({
           inputMode="numeric"
           required
           defaultValue={menu?.durationMin}
-          className="w-full rounded-md border border-gray-300 px-3 py-2 text-base focus:border-blue-500 focus:outline-none"
+          className="w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-base text-gray-900 focus:border-blue-500 focus:outline-none dark:border-gray-700 dark:bg-gray-800 dark:text-gray-100"
         />
       </div>
 
       <div className="flex gap-2">
-        <button
-          type="submit"
-          className="rounded-md bg-blue-600 px-4 py-3 text-base font-medium text-white"
+        <SubmitButton
+          pendingText="保存中..."
+          className="flex min-h-12 items-center justify-center rounded-md bg-blue-600 px-4 text-base font-medium text-white"
         >
           保存
-        </button>
+        </SubmitButton>
         <Link
           href="/admin/menus"
-          className="rounded-md border border-gray-300 px-4 py-3 text-base text-gray-700"
+          className="flex min-h-12 items-center rounded-md border border-gray-300 px-4 text-base text-gray-700 dark:border-gray-700 dark:text-gray-200"
         >
           キャンセル
         </Link>

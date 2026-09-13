@@ -9,7 +9,7 @@ export default async function NewFaqPage() {
 
   return (
     <div className="space-y-4">
-      <h1 className="text-lg font-semibold text-gray-900">FAQ新規追加</h1>
+      <h1 className="text-lg font-semibold text-gray-900 dark:text-gray-100">FAQ新規追加</h1>
       <FaqForm action={createFaqAction} />
     </div>
   );
