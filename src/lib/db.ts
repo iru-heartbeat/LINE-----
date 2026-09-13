@@ -50,6 +50,48 @@ export async function getMenus(): Promise<Menu[]> {
   }));
 }
 
+export async function getMenuById(id: number): Promise<Menu | null> {
+  const { rows } = await pool.query<{
+    id: number;
+    category: string;
+    name: string;
+    price: number;
+    duration_min: number;
+  }>("SELECT id, category, name, price, duration_min FROM menus WHERE id = $1", [id]);
+  if (rows.length === 0) return null;
+  const r = rows[0];
+  return { id: r.id, category: r.category, name: r.name, price: r.price, durationMin: r.duration_min };
+}
+
+export async function createMenu(params: {
+  category: string;
+  name: string;
+  price: number;
+  durationMin: number;
+}): Promise<void> {
+  await pool.query(
+    "INSERT INTO menus (category, name, price, duration_min) VALUES ($1, $2, $3, $4)",
+    [params.category, params.name, params.price, params.durationMin]
+  );
+}
+
+export async function updateMenu(params: {
+  id: number;
+  category: string;
+  name: string;
+  price: number;
+  durationMin: number;
+}): Promise<void> {
+  await pool.query(
+    "UPDATE menus SET category = $2, name = $3, price = $4, duration_min = $5, updated_at = now() WHERE id = $1",
+    [params.id, params.category, params.name, params.price, params.durationMin]
+  );
+}
+
+export async function deleteMenu(id: number): Promise<void> {
+  await pool.query("DELETE FROM menus WHERE id = $1", [id]);
+}
+
 export async function logInquiry(params: {
   lineUserId: string;
   message: string;
