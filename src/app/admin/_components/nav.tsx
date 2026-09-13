@@ -7,6 +7,7 @@ import { logoutAction } from "../actions";
 const links = [
   { href: "/admin/faqs", label: "FAQ管理" },
   { href: "/admin/inquiries", label: "問い合わせ履歴" },
+  { href: "/admin/broadcast", label: "一斉配信" },
 ];
 
 export function AdminNav() {

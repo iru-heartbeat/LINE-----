@@ -67,3 +67,75 @@ export async function pushMessage(toUserId: string, text: string): Promise<void>
     throw new Error(`LINE push failed: ${res.status} ${errText}`);
   }
 }
+
+function getAccessTokenOrThrow(): string {
+  const token = process.env.LINE_CHANNEL_ACCESS_TOKEN;
+  if (!token) throw new Error("LINE_CHANNEL_ACCESS_TOKEN is not set");
+  return token;
+}
+
+// 友だち全員へお知らせメッセージを一斉配信する
+export async function sendBroadcast(text: string): Promise<void> {
+  const token = getAccessTokenOrThrow();
+
+  const res = await fetch("https://api.line.me/v2/bot/message/broadcast", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify({ messages: [{ type: "text", text }] }),
+  });
+
+  if (!res.ok) {
+    const errText = await res.text();
+    throw new Error(`LINE broadcast failed: ${res.status} ${errText}`);
+  }
+}
+
+export type MessageQuota = { limit: number | null; used: number };
+
+// 今月のメッセージ配信の上限と使用済み数（無料枠の残数確認用）
+export async function getMessageQuota(): Promise<MessageQuota> {
+  const token = getAccessTokenOrThrow();
+  const authHeaders = { Authorization: `Bearer ${token}` };
+
+  const [quotaRes, consumptionRes] = await Promise.all([
+    fetch("https://api.line.me/v2/bot/message/quota", { headers: authHeaders }),
+    fetch("https://api.line.me/v2/bot/message/quota/consumption", { headers: authHeaders }),
+  ]);
+  if (!quotaRes.ok || !consumptionRes.ok) {
+    throw new Error("LINE quota fetch failed");
+  }
+
+  const quota = (await quotaRes.json()) as { type: "limited" | "none"; value?: number };
+  const consumption = (await consumptionRes.json()) as { totalUsage: number };
+
+  return {
+    limit: quota.type === "limited" ? (quota.value ?? null) : null,
+    used: consumption.totalUsage,
+  };
+}
+
+function yesterdayInJstAsYyyymmdd(): string {
+  const jstNow = new Date(new Date().toLocaleString("en-US", { timeZone: "Asia/Tokyo" }));
+  jstNow.setDate(jstNow.getDate() - 1);
+  const y = jstNow.getFullYear();
+  const m = String(jstNow.getMonth() + 1).padStart(2, "0");
+  const d = String(jstNow.getDate()).padStart(2, "0");
+  return `${y}${m}${d}`;
+}
+
+// 前日時点の友だち数（当日分の集計はLINE側でまだ確定していないため取得できない）
+export async function getFollowerCount(): Promise<number | null> {
+  const token = getAccessTokenOrThrow();
+  const date = yesterdayInJstAsYyyymmdd();
+
+  const res = await fetch(`https://api.line.me/v2/bot/insight/followers?date=${date}`, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+  if (!res.ok) return null;
+
+  const data = (await res.json()) as { status: string; followers?: number };
+  return data.status === "ready" ? (data.followers ?? null) : null;
+}

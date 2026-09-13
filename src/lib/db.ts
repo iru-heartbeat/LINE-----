@@ -115,6 +115,35 @@ export type Inquiry = {
   createdAt: string;
 };
 
+export type Broadcast = {
+  id: number;
+  message: string;
+  sentAt: string;
+  recipientCount: number;
+};
+
+export async function createBroadcast(params: { message: string; recipientCount: number }): Promise<void> {
+  await pool.query("INSERT INTO broadcasts (message, recipient_count) VALUES ($1, $2)", [
+    params.message,
+    params.recipientCount,
+  ]);
+}
+
+export async function getBroadcasts(): Promise<Broadcast[]> {
+  const { rows } = await pool.query<{
+    id: number;
+    message: string;
+    sent_at: string;
+    recipient_count: number;
+  }>("SELECT id, message, sent_at, recipient_count FROM broadcasts ORDER BY sent_at DESC");
+  return rows.map((r) => ({
+    id: r.id,
+    message: r.message,
+    sentAt: r.sent_at,
+    recipientCount: r.recipient_count,
+  }));
+}
+
 export async function getInquiries(): Promise<Inquiry[]> {
   const { rows } = await pool.query<{
     id: number;
