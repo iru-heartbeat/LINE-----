@@ -54,3 +54,23 @@ export async function logInquiry(params: {
     [params.lineUserId, params.message, params.botResponse, params.isEscalated]
   );
 }
+
+export type AdminUser = {
+  id: number;
+  email: string;
+  passwordHash: string;
+};
+
+export async function getAdminUserByEmail(email: string): Promise<AdminUser | null> {
+  const { rows } = await pool.query<{ id: number; email: string; password_hash: string }>(
+    "SELECT id, email, password_hash FROM admin_users WHERE email = $1",
+    [email]
+  );
+  if (rows.length === 0) return null;
+  const row = rows[0];
+  return { id: row.id, email: row.email, passwordHash: row.password_hash };
+}
+
+export async function touchAdminLastLogin(adminUserId: number): Promise<void> {
+  await pool.query("UPDATE admin_users SET last_login_at = now() WHERE id = $1", [adminUserId]);
+}
